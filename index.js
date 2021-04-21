@@ -71,122 +71,102 @@ const addDept = () => {
     })
     .then((answer) => {
       const query = "INSERT INTO dept SET ?";
-      connection.query(query, (err, res) => {
+      connection.query(query, { deptName: answer.dept }, (err, res) => {
         if (err) throw err;
-        res.forEach(({ dept }) => console.log(answer.dept));
-        runSearch();
+        console.log(`The ${answer.dept} department has been added!`);
+        start();
       });
     });
 };
 
-// const multiSearch = () => {
-//   const query =
-//     "SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1";
-//   connection.query(query, (err, res) => {
-//     res.forEach(({ artist }) => console.log(artist));
-//     runSearch();
-//   });
-// };
+const addRole = () => {
+    inquirer
+      .prompt({
+        name: "role",
+        type: "input",
+        message: "What role do you want to add?",
+      })
+      .then((answer) => {
+        const query = "INSERT INTO role SET ?";
+        connection.query(query, { title: answer.role }, (err, res) => {
+          if (err) throw err;
+          console.log(`${answer.role} role has been added!`);
+          start();
+        });
+      });
+};
 
-// const rangeSearch = () => {
-//   inquirer
-//     .prompt([
-//       {
-//         name: "start",
-//         type: "input",
-//         message: "Enter starting position: ",
-//         validate(value) {
-//           if (isNaN(value) === false) {
-//             return true;
-//           }
-//           return false;
-//         },
-//       },
-//       {
-//         name: "end",
-//         type: "input",
-//         message: "Enter ending position: ",
-//         validate(value) {
-//           if (isNaN(value) === false) {
-//             return true;
-//           }
-//           return false;
-//         },
-//       },
-//     ])
-//     .then((answer) => {
-//       const query =
-//         "SELECT position,song,artist,year FROM top5000 WHERE position BETWEEN ? AND ?";
-//       connection.query(query, [answer.start, answer.end], (err, res) => {
-//         res.forEach(({ position, song, artist, year }) => {
-//           console.log(
-//             `Position: ${position} || Song: ${song} || Artist: ${artist} || Year: ${year}`
-//           );
-//         });
-//         runSearch();
-//       });
-//     });
-// };
+// const addEmployee = () => {
+//   connection.query(
+//     "SELECT * FROM employee WHERE manager_id IS NULL;",
+//     (err, data) => {
+//       if (err) throw err;
+//       connection.query("SELECT * FROM role SET", (err, data2) => {
+//         if (err) throw err;
 
-// const songSearch = () => {
-//   inquirer
-//     .prompt({
-//       name: "song",
-//       type: "input",
-//       message: "What song would you like to look for?",
-//     })
-//     .then((answer) => {
-//       console.log(answer.song);
-//       connection.query(
-//         "SELECT * FROM top5000 WHERE ?",
-//         { song: answer.song },
-//         (err, res) => {
-//           if (res[0]) {
-//             console.log(
-//               `Position: ${res[0].position} || Song: ${res[0].song} || Artist: ${res[0].artist} || Year: ${res[0].year}`
+//         inquirer
+//           .prompt([
+//             {
+//               name: "firstName",
+//               type: "input",
+//               message: "What is the employee's first name?",
+//             },
+//             {
+//               name: "lastName",
+//               type: "input",
+//               message: "What is the employee's last name?",
+//             },
+//             {
+//               name: "role",
+//               type: "list",
+//               message: "What is the employee's role?",
+//               choices: data2.map(({ id, title }) => {
+//                 return { name: title, value: id };
+//               }),
+//             },
+//             {
+//               name: "manager",
+//               type: "list",
+//               message: "Who is the employee's manager?",
+//               choices: data.map(({ first_name, last_name, id }) => {
+//                 return { name: first_name + " " + last_name, value: id };
+//               }),
+//             },
+//           ])
+//           .then((answer) => {
+//             createEmployee(
+//               answer.firstName,
+//               answer.lastName,
+//               answer.roleID,
+//               answer.managerID
 //             );
-//           } else {
-//             console.error(`No results for ${answer.song}`);
-//           }
-//           runSearch();
-//         }
-//       );
-//     });
-// };
-
-// const songAndAlbumSearch = () => {
-//   inquirer
-//     .prompt({
-//       name: "artist",
-//       type: "input",
-//       message: "What artist would you like to search for?",
-//     })
-//     .then((answer) => {
-//       let query =
-//         "SELECT top_albums.year, top_albums.album, top_albums.position, top5000.song, top5000.artist ";
-//       query +=
-//         "FROM top_albums INNER JOIN top5000 ON (top_albums.artist = top5000.artist AND top_albums.year ";
-//       query +=
-//         "= top5000.year) WHERE (top_albums.artist = ? AND top5000.artist = ?) ORDER BY top_albums.year, top_albums.position";
-
-//       connection.query(query, [answer.artist, answer.artist], (err, res) => {
-//         console.log(`${res.length} matches found!`);
-//         res.forEach(({ year, position, artist, song, album }, i) => {
-//           const num = i + 1;
-//           console.log(
-//             `${num} Year: ${year} Position: ${position} || Artist: ${artist} || Song: ${song} || Album: ${album}`
-//           );
-//         });
-
-//         runSearch();
+//           });
 //       });
-//     });
+//     }
+//   );
 // };
+
+// function createEmployee(firstName, lastName, roleID, managerID){
+//     connection.query(
+//         "INSERT INTO employee SET ?",
+//         {
+//             first_name: firstName,
+//             last_name: lastName,
+//             role_id: roleID,
+//             manager_id: managerID,
+//         },
+//         (err, res) => {
+//             if(err) throw err;
+//             console.log("Employee has been added!");
+//         }
+//     );
+//     start();
+// }
 
 connection.connect((err) => {
   //ERROR HANDLING
   if (err) throw err;
   console.log("Did I connect to the database", connection.threadId);
   start();
-  connection.end();
+  //   connection.end();
 });
