@@ -96,72 +96,72 @@ const addRole = () => {
       });
 };
 
-// const addEmployee = () => {
-//   connection.query(
-//     "SELECT * FROM employee WHERE manager_id IS NULL;",
-//     (err, data) => {
-//       if (err) throw err;
-//       connection.query("SELECT * FROM role SET", (err, data2) => {
-//         if (err) throw err;
+const addEmployee = () => {
+  connection.query(
+    "SELECT * FROM employee WHERE manager_id IS NULL;",
+    (err, data) => {
+      if (err) throw err;
+      connection.query("SELECT * FROM role", (err, data2) => {
+        if (err) throw err;
 
-//         inquirer
-//           .prompt([
-//             {
-//               name: "firstName",
-//               type: "input",
-//               message: "What is the employee's first name?",
-//             },
-//             {
-//               name: "lastName",
-//               type: "input",
-//               message: "What is the employee's last name?",
-//             },
-//             {
-//               name: "role",
-//               type: "list",
-//               message: "What is the employee's role?",
-//               choices: data2.map(({ id, title }) => {
-//                 return { name: title, value: id };
-//               }),
-//             },
-//             {
-//               name: "manager",
-//               type: "list",
-//               message: "Who is the employee's manager?",
-//               choices: data.map(({ first_name, last_name, id }) => {
-//                 return { name: first_name + " " + last_name, value: id };
-//               }),
-//             },
-//           ])
-//           .then((answer) => {
-//             createEmployee(
-//               answer.firstName,
-//               answer.lastName,
-//               answer.roleID,
-//               answer.managerID
-//             );
-//           });
-//       });
-//     }
-//   );
-// };
+        inquirer
+          .prompt([
+            {
+              name: "firstName",
+              type: "input",
+              message: "What is the employee's first name?",
+            },
+            {
+              name: "lastName",
+              type: "input",
+              message: "What is the employee's last name?",
+            },
+            {
+              name: "role",
+              type: "list",
+              message: "What is the employee's role?",
+              choices: data2.map(({ id, title }) => {
+                return { name: title, value: id };
+              }),
+            },
+            {
+              name: "manager",
+              type: "list",
+              message: "Who is the employee's manager?",
+              choices: data.map(({ first_name, last_name, id }) => {
+                return { name: first_name + " " + last_name, value: id };
+              }),
+            },
+          ])
+          .then((answer) => {
+            createEmployee(
+              answer.firstName,
+              answer.lastName,
+              answer.roleID,
+              answer.managerID
+            );
+          });
+      });
+    }
+  );
+};
 
-// function createEmployee(firstName, lastName, roleID, managerID){
-//     connection.query(
-//         "INSERT INTO employee SET ?",
-//         {
-//             first_name: firstName,
-//             last_name: lastName,
-//             role_id: roleID,
-//             manager_id: managerID,
-//         },
-//         (err, res) => {
-//             if(err) throw err;
-//             console.log("Employee has been added!");
-//         }
-//     );
-//     start();
-// }
+function createEmployee(firstName, lastName, roleID, managerID){
+    connection.query(
+        "INSERT INTO employee SET ?",
+        {
+            first_name: firstName,
+            last_name: lastName,
+            role_id: roleID,
+            manager_id: managerID,
+        },
+        (err, res) => {
+            if(err) throw err;
+            console.log("Employee has been added!");
+        }
+    );
+    start();
+}
 
 connection.connect((err) => {
   //ERROR HANDLING
