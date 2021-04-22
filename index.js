@@ -137,8 +137,8 @@ const addEmployee = () => {
             createEmployee(
               answer.firstName,
               answer.lastName,
-              answer.roleID,
-              answer.managerID
+              answer.role,
+              answer.manager
             );
           });
       });
@@ -161,6 +161,17 @@ function createEmployee(firstName, lastName, roleID, managerID){
         }
     );
     start();
+}
+
+function viewEmployees(){
+  connection.query(
+      "SELECT * FROM employee",
+      (err, res) => {
+          if(err) throw err;
+          console.log(res);
+      }
+  );
+  start();
 }
 
 connection.connect((err) => {

@@ -1,6 +1,6 @@
 # employee-mgmt-system
 
-Started off with creating a schema file that includes the three tables(dept, role, and employee) on both workbench and sql file. I then created prompts to ask the user of what action they wanted to do. Each prompt had it's own separate function. The first function I created after the main inquirer prompt was the "Add Dept". Originally it wasn't working because I didn't add the { deptName: answer.dept } argument/param in it. After that it worked and the same method was done for the "Add Role" function. 
+Started off with creating a schema file that includes the three tables(dept, role, and employee) on both workbench and sql file. I then created prompts to ask the user of what action they wanted to do. Each prompt had it's own separate function. The first function I created after the main inquirer prompt was the "Add Dept". Originally it wasn't working because I didn't add the { deptName: answer.dept } argument/param in it. After that it worked and the same method was done for the "Add Role" function. I didn't know how to get the data to show of all the employees, roles, and departments. 
 
 # Github Repo link
 
